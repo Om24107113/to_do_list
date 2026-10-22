@@ -143,6 +143,26 @@ If a page does not load, first check `docker compose ps` and `docker compose log
 
 Grafana is not installed, configured, or verified here. This project demonstrates Prometheus metrics and its built-in query/graph view. The student brief also mentions Grafana and a dashboard/metric view, so check your instructor's rubric: if a Grafana dashboard is mandatory, that assignment item remains open and Grafana must be added and verified separately.
 
+### Shared local-run screenshots
+
+These screenshots were supplied from a local app and Prometheus run. They show the interface and an **UP** scrape target; they are not evidence of a Docker deployment or GitHub Actions result.
+
+**To-do app:**
+
+![To-do list running locally](uitodolist.png)
+
+**Prometheus target health:**
+
+![Prometheus todo-app target shown as UP during a local run](image.png)
+
+The following Prometheus query screenshots are earlier local-run evidence. They use the old total-task metric name `todo_tasks`; the current app exports `todo_tasks_total`. Use the current metric names in the monitoring instructions above.
+
+![Earlier Prometheus task metrics query results](promethus%20task%20window%20image.png)
+
+![Earlier Prometheus task metric graph](promethus_graph.png)
+
+For the final report, capture fresh screenshots from your own GitHub Actions and Docker Compose runs as well.
+
 ## What CI does
 
 `.github/workflows/ci.yml` runs on every push and pull request. GitHub Actions checks out the code, sets up Python 3.12, installs the pinned dependencies, runs pytest, and builds the Docker image. It does **not** publish an image or require repository secrets.

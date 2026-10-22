@@ -8,3 +8,5 @@ instance
 tests
 README.md
 .env
+*.pdf
+*.png
