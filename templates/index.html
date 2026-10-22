@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#f4f6fb">
+    <title>My To-Do List</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  </head>
+  <body>
+    <main class="page-shell">
+      <header class="page-header">
+        <p class="eyebrow">A little more focus, one task at a time</p>
+        <h1>My To-Do List</h1>
+        <p class="subtitle">Keep track of what matters today.</p>
+      </header>
+
+      <section class="todo-card" aria-labelledby="tasks-heading">
+        <form class="add-form" action="{{ url_for('add_task') }}" method="post">
+          <label class="visually-hidden" for="task-title">New task</label>
+          <input
+            id="task-title"
+            name="title"
+            type="text"
+            maxlength="200"
+            placeholder="What needs to get done?"
+            autocomplete="off"
+            required
+          >
+          <button class="button button-primary" type="submit">Add task</button>
+        </form>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+            <ul class="messages" aria-live="polite">
+              {% for category, message in messages %}
+                <li class="message message-{{ category }}">{{ message }}</li>
+              {% endfor %}
+            </ul>
+          {% endif %}
+        {% endwith %}
+
+        <div class="list-heading">
+          <h2 id="tasks-heading">Your tasks</h2>
+          <span class="task-count">{{ tasks|length }} total</span>
+        </div>
+
+        {% if tasks %}
+          <ul class="task-list">
+            {% for task in tasks %}
+              <li class="task-row{% if task['completed'] %} is-complete{% endif %}">
+                <span class="task-title">{{ task['title'] }}</span>
+                <div class="task-actions">
+                  <form action="{{ url_for('toggle_task', task_id=task['id']) }}" method="post">
+                    <button class="button button-quiet" type="submit">
+                      {% if task['completed'] %}Undo{% else %}Complete{% endif %}
+                    </button>
+                  </form>
+                  <form action="{{ url_for('delete_task', task_id=task['id']) }}" method="post">
+                    <button class="button button-delete" type="submit" aria-label="Delete {{ task['title'] }}">
+                      Delete
+                    </button>
+                  </form>
+                </div>
+              </li>
+            {% endfor %}
+          </ul>
+        {% else %}
+          <div class="empty-state">
+            <span class="empty-icon" aria-hidden="true">✓</span>
+            <p>Your list is clear.</p>
+            <span>Add a task above to get started.</span>
+          </div>
+        {% endif %}
+      </section>
+
+      <footer class="page-footer">
+        <span>Simple list, steady progress.</span>
+        <a href="{{ url_for('metrics') }}">App metrics</a>
+      </footer>
+    </main>
+  </body>
+</html>
